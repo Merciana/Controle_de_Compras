@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('imagens/image.png');
+    background-attachment:fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    padding: 0;
+    overflow-x: auto;
+    
+}
+
+header.cabecalho{
+    padding: 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    color: #ffffff;
+    background: #0b3264;
+}
+
+header h1 {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    flex-grow: 1;
+    text-align: center;
+}
+.logo {
+    height: 60px;
+    margin-right: 0px;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+footer{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #021836;
+    color: #ffffff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.btn-logout {
+    background-color: transparent;
+    color: white;
+    padding: 5px 5px;
+    font-size: 15px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+}
+
+.btn-logout svg {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+}

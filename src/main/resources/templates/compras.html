@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Compras</title>
+    <link rel="stylesheet" href="style-global.css">
+    <link rel="stylesheet" href="style-compras.css">
+</head>
+<body>
+    <header class='cabecalho'>
+        <img src="imagens/logoSter.png" alt="logo" class="logo"> 
+        <h1>Controle de Compras</h1>
+
+        <div sec:authorize="isAuthenticated()">
+            <a href="/controle_de_compras/login" title="Sair" class="btn-logout">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                  </svg>
+            </a>
+        </div>
+    </header>
+    
+    <main class="conteudo">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Comprador</th>
+                    <th>Solicitante</th>
+                    <th>Almoxerifado</th>
+                    <th>Empresa</th>
+                    <th>Nota Fiscal</th>
+                    <th>Palavra Chave</th>
+                    <th>Produto</th>
+                    <th>Previsão de chegada</th>
+                    <th>Porteiro</th>
+                    <th>Recebido em:</th>
+                    <th>Ações</th> 
+                </tr>
+            </thead>
+    
+            <tbody id="compras-tbody">
+                <th:block th:each="compra : ${compras}" th:classappend="${compra.concluido} ? 'concluida' : ''">
+                    <tr th:attr="data-id=${compra.id}">
+                        <td th:text="${compra.id}"></td>
+                        <td th:text="${compra.nomeComprador}"></td>
+                        <td th:text="${compra.nomeSolicitante}"></td>
+                        <td th:text="${compra.almoxerifado}"></td>
+                        <td th:text="${compra.nomeEmpresa}"></td>
+                        <td th:text="${compra.notaFiscal}"></td>
+                        <td th:text="${compra.palavraChave}"></td>
+                        <td th:text="${compra.nomeProduto}"></td>
+                        <td th:text="${compra.dataChegada}"></td>
+                        <td>
+                            <input type="text" id="nomePorteiro-${compra.id}" 
+                                   th:value="${compra.nomePorteiro}" 
+                                   th:data-id="${compra.id}" 
+                                   onchange="atualizarNomePorteiro(this)">
+                        </td>
+                        <td class="data-recebido" th:text="${compra.dataRecebido != null ? #temporals.format(compra.dataRecebido, 'dd/MM/yyyy') : 'Não Recebido'}"></td>
+                        <td>
+                            <button class="btn-ok" th:attr="onclick='concluidoCompra(' + ${compra.id} + ')'" th:disabled="${compra.concluido}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+                              </svg>
+                            </button>
+
+                            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                                <button class="btn-excluir" th:onclick="'excluirCompra(' + ${compra.id} + ', this)'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    
+        <!-- Botão de adicionar nova compra visível apenas para ADMIN -->
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="botao-container">
+                <a href="/controle_de_compras/compras/formulario">
+                    <button class="btn-adicionar">Adicionar nova compra</button>
+                </a>
+            </div>
+        </div>
+    
+        <script>
+            function excluirCompra(id, button) {
+                const url = `/controle_de_compras/compras/excluir/${id}`;
+              
+                fetch(url, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao excluir compra');
+                    }
+    
+                    const row = button.closest('tr');
+                    if (row) {
+                        row.remove();
+                    }
+    
+                    console.log("Compra excluída com sucesso!");
+                })
+                .catch(error => {
+                    console.error("Erro ao excluir compra:", error);
+                    alert("Erro ao excluir compra");
+                });
+            }
+    
+            function concluidoCompra(id) {
+                console.log("ID da compra:", id);
+                const url = `/controle_de_compras/compras/concluido/${id}`;
+        
+                if (!id) {
+                    alert("ID da compra não encontrado.");
+                    return;
+                }
+        
+                fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({ concluido: true }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Resposta do servidor:", data);
+                    if (data.success) {
+                        const row = document.querySelector(`tr[data-id="${id}"]`);
+                        console.log("Linha da compra:", row);
+    
+                        if (row) {
+                            row.classList.add('concluida');
+                            const dataRecebidoCell = row.querySelector('.data-recebido');
+                            if (dataRecebidoCell) {
+                                const dataRecebido = new Date(data.dataRecebido);
+                                if (!isNaN(dataRecebido.getTime())) {
+                                    dataRecebidoCell.textContent = dataRecebido.toLocaleDateString('pt-BR');
+                                } else {
+                                    dataRecebidoCell.textContent = 'Não Recebido';
+                                }
+                            }
+    
+                            row.classList.add('concluida');
+                            const tableBody = document.querySelector("tbody");
+                            tableBody.appendChild(row);
+    
+                            console.log("Compra concluída com sucesso.");
+                        } else {
+                            console.log("Linha não encontrada no DOM.");
+                        }
+                    } else {
+                        alert("Erro ao concluir compra");
+                    }
+                })
+                .catch(error => alert("Erro ao comunicar com o servidor"));
+            }
+    
+            function atualizarNomePorteiro(inputElement) {
+                const id = inputElement.getAttribute('data-id');
+                const nomePorteiro = inputElement.value;
+            
+                console.log(`Atualizando nome do porteiro para ${nomePorteiro} (ID: ${id})`);
+            
+                const url = `/controle_de_compras/compras/atualizarPorteiro/${id}`;
+                
+                fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({ nomePorteiro: nomePorteiro }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const nomePorteiroCell = document.querySelector(`tr[data-id="${id}"] input`);
+                        if (nomePorteiroCell) {
+                            nomePorteiroCell.value = nomePorteiro;
+                        }
+                        console.log("Nome do porteiro atualizado com sucesso!");
+                    } else {
+                        alert("Erro ao atualizar o nome do porteiro.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao comunicar com o servidor", error);
+                    alert("Erro ao comunicar com o servidor");
+                });
+            }
+    
+            function ordenarCompras() {
+                const tbody = document.getElementById('compras-tbody');
+                const rows = Array.from(tbody.rows);
+
+                const nãoConcluídas = rows.filter(row => !row.querySelector('.btn-ok').disabled);
+                const concluídas = rows.filter(row => row.querySelector('.btn-ok').disabled);
+
+                const allRows = [...nãoConcluídas, ...concluídas];
+
+                tbody.innerHTML = '';
+                allRows.forEach(row => tbody.appendChild(row));
+            }
+
+            window.onload = ordenarCompras;
+        </script>
+    </main>
+    
+    <footer>
+        <p>&copy; Copyright © 2025 Ster Bom</p>
+    </footer>
+    </body>
+    </html>

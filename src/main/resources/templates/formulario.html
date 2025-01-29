@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Compra</title>
+    <link rel="stylesheet" href="/controle_de_compras/static/style-formulario.css">
+    <link rel="stylesheet" href="/controle_de_compras/static/style-global.css">
+</head>
+<body>
+
+    <header class="cabecalho">
+        <img src="/controle_de_compras/static/imagens/logoSter.png" alt="banner" class="logo">
+        <h1>Formulário de Compra</h1>
+
+        <div sec:authorize="isAuthenticated()">
+            <a href="/controle_de_compras/login" title="Sair" class="btn-logout">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                  </svg>
+            </a>
+        </div>
+    </header>
+
+    <div class="form-container">
+        <form th:action="@{/compras/salvar}" th:object="${compra}" method="POST">
+            <label for="nomeComprador">Nome do Comprador:</label>
+            <input type="text" id="nomeComprador" th:field="*{nomeComprador}" required>
+            <div th:if="${#fields.hasErrors('nomeComprador')}" class="error">
+                <span th:errors="*{nomeComprador}"></span>
+            </div>
+
+            <label for="nomeSolicitante">Solicitante:</label>
+            <input type="text" id="nomeSolicitante" th:field="*{nomeSolicitante}" required>
+            <div th:if="${#fields.hasErrors('nomeSolicitante')}" class="error">
+                <span th:errors="*{nomeSolicitante}"></span>
+            </div>
+
+            <label for="almoxerifado">Setor:</label>
+            <input type="text" id="almoxerifado" th:field="*{almoxerifado}" required>
+            <div th:if="${#fields.hasErrors('almoxerifado')}" class="error">
+                <span th:errors="*{almoxerifado}"></span>
+            </div>
+
+            
+            <label for="nomeEmpresa">Nome da Empresa:</label>
+            <input type="text" id="nomeEmpresa" th:field="*{nomeEmpresa}" required>
+            <div th:if="${#fields.hasErrors('nomeEmpresa')}" class="error">
+                <span th:errors="*{nomeEmpresa}"></span>
+            </div>
+
+            
+            <label for="notaFiscal">Número da Nota Fiscal:</label>
+            <input type="number" id="notaFiscal" th:field="*{notaFiscal}" required>
+            <div th:if="${#fields.hasErrors('notaFiscal')}" class="error">
+                <span th:errors="*{notaFiscal}"></span>
+            </div>
+
+            
+            <label for="palavraChave">Código do Pedido:</label>
+            <input type="text" id="palavraChave" th:field="*{palavraChave}" required>
+            <div th:if="${#fields.hasErrors('palavraChave')}" class="error">
+                <span th:errors="*{palavraChave}"></span>
+            </div>
+
+            <label for="nomeProduto">Nome do Produto:</label>
+            <input type="text" id="nomeProduto" th:field="*{nomeProduto}" required>
+            <div th:if="${#fields.hasErrors('nomeProduto')}" class="error">
+                <span th:errors="*{nomeProduto}"></span>
+            </div>
+
+            <label for="dataChegada">Data de Recebimento:</label>
+            <input type="date" id="dataChegada" th:field="*{dataChegada}" required>
+            <div th:if="${#fields.hasErrors('dataChegada')}" class="error">
+                <span th:errors="*{dataChegada}"></span>
+            </div>
+
+            
+            <div class="botao-container">
+                <button class="btn-container" type="submit">Salvar</button>
+            
+                <a href="/controle_de_compras/compras" class="btn-container">
+                    Voltar
+                </a>
+            </div>
+            
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; Copyright © 2025 Ster Bom</p>
+    </footer>
+
+</body>
+</html>
